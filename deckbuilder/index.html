@@ -12,8 +12,18 @@
   </head>
   <body>
 
-    <div class="container">
-      <h1>Hello World!</h1>
+    <div id="app" class="row"> 
+    		<div class="col-md-8">
+	        <div v-for="card in cards | orderBy 'name'" style="cursor:pointer"> 
+	            <Card :card="card" @click="addToDeck(card)"></Card>
+	        </div>
+    		</div>
+    		<div class="col-md-4">
+    			<h1>Deck ({{deckTotal()}}/30)</h1>
+	        <div v-for="card in deck | orderBy 'cost'" style="cursor:pointer">
+	            <p @click="addToCollection(card)">{{card.cost}} {{card.name}} {{card.copy}}</p>
+	        </div>
+    		</div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
