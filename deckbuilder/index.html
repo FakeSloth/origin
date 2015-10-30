@@ -14,6 +14,15 @@
   <body>
 
     <div id="app"> 
+        <div>
+            <h4>Decks</h4>
+            <div>
+                <a v-for="deck in decks" style="cursor:pointer" @click="loadDeck($index)">
+                    {{deck.name}}
+                </a>&nbsp;
+                <button class="btn btn-primary btn-sm" @click="createNewDeck">New Deck</button>
+            </div>
+        </div>
     	<div>
             <a @click="changeCollection('alien')">Alien</a> 
             <a @click="changeCollection('angel')">Angel</a> 
@@ -32,10 +41,16 @@
 	        </div>
     		</div>
     		<div class="col-md-4">
-    			<h1>Deck ({{deckTotal()}}/30)</h1>
-	        <div v-for="card in deck | orderBy 'cost'" style="cursor:pointer">
+			<h1>
+                <label>
+                    <input type="text" placeholder="Deck" class="form-control" v-model="deckName">
+                    ({{deckTotal()}}/30)
+                </label>
+            </h1>
+	        <div v-for="card in currentDeck | orderBy 'cost'" style="cursor:pointer">
 	            <p @click="addToCollection(card)">{{card.cost}} {{card.name}} x{{card.copy}}</p>
 	        </div>
+            <button class="btn btn-info btn-sm" @click="saveDeck">Save</button>
     		</div>
     	</div>
     </div>

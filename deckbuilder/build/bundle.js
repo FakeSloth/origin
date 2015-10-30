@@ -5280,15 +5280,17 @@
 	
 	_vue2['default'].component('card', Card);
 	
-	var aliens = createCards(_cardsMonstersAlien2['default'], 'alien');
-	var angels = createCards(_cardsMonstersAngel2['default'], 'angel');
-	var beasts = createCards(_cardsMonstersBeast2['default'], 'beast');
-	var demons = createCards(_cardsMonstersDemon2['default'], 'demon');
-	var dragons = createCards(_cardsMonstersDragon2['default'], 'dragon');
-	var mechs = createCards(_cardsMonstersMech2['default'], 'mech');
-	var humans = createCards(_cardsMonstersHuman2['default'], 'human');
-	var spells = createCards(_cardsSpellsSpells2['default'], 'spell');
-	var traps = createCards(_cardsTrapsTraps2['default'], 'trap');
+	var Collections = {
+		alien: createCards(_cardsMonstersAlien2['default'], 'alien'),
+		angel: createCards(_cardsMonstersAngel2['default'], 'angel'),
+		beast: createCards(_cardsMonstersBeast2['default'], 'beast'),
+		demon: createCards(_cardsMonstersDemon2['default'], 'demon'),
+		dragon: createCards(_cardsMonstersDragon2['default'], 'dragon'),
+		mech: createCards(_cardsMonstersMech2['default'], 'mech'),
+		human: createCards(_cardsMonstersHuman2['default'], 'human'),
+		spell: createCards(_cardsSpellsSpells2['default'], 'spell'),
+		trap: createCards(_cardsTrapsTraps2['default'], 'trap')
+	};
 	
 	/**
 	 * Modify the created cards.
@@ -5337,38 +5339,82 @@
 	new _vue2['default']({
 		el: '#app',
 		data: {
-			collections: {
-				alien: aliens,
-				angel: angels,
-				beast: beasts,
-				demon: demons,
-				dragon: dragons,
-				human: humans,
-				mech: mechs,
-				spell: spells,
-				trap: traps
-			},
-			deck: [],
-			currentCollection: aliens
+			decks: [],
+			currentDeck: [],
+			collections: [],
+			currentCollection: [],
+			deckName: '',
+			loaded: false,
+			index: 0
 		},
 		methods: {
 			addToDeck: function addToDeck(card) {
 				if (this.deckTotal() >= 30) return;
-				add(this.currentCollection, this.deck, card);
+				add(this.currentCollection, this.currentDeck, card);
 			},
 	
 			addToCollection: function addToCollection(card) {
-				add(this.deck, this.collections[card.collection], card);
+				add(this.currentDeck, this.collections[card.collection], card);
 			},
 	
 			changeCollection: function changeCollection(collection) {
 				this.currentCollection = this.collections[collection];
 			},
 	
+			createNewDeck: function createNewDeck() {
+				if (this.decks.length) {
+	
+					console.log(JSON.stringify(this.decks[0].collections.alien));
+					var collections = Object.create(Collections);
+					console.log(JSON.stringify(this.decks[0].collections.alien));
+					this.collections = collections;
+					this.currentCollection = this.collections.alien;
+					this.currentDeck = [];
+					this.deckName = '';
+					this.loaded = false;
+				} else {
+	
+					var collections = Object.create(Collections);
+					this.collections = collections;
+					this.currentCollection = this.collections.alien;
+					this.currentDeck = [];
+					this.deckName = '';
+					this.loaded = false;
+				}
+			},
+	
 			deckTotal: function deckTotal() {
-				return this.deck.reduce(function (acc, cur) {
+				return this.currentDeck.reduce(function (acc, cur) {
 					return acc + cur.copy;
 				}, 0);
+			},
+	
+			loadDeck: function loadDeck(index) {
+				var deck = this.decks[index];
+				this.collections = deck.collections;
+				this.currentCollection = this.collections.alien;
+				this.currentDeck = deck.cards;
+				this.deckName = deck.name;
+				this.index = index;
+				this.loaded = true;
+			},
+	
+			saveDeck: function saveDeck() {
+				if (this.deckTotal() < 30) {
+					return alert('Deck is not full!');
+				}
+				var collections = this.collections;
+				var deck = {
+					name: this.deckName || 'Untitled Deck',
+					cards: this.currentDeck,
+					collections: collections
+				};
+				if (this.loaded) {
+					this.decks.$set(this.index, deck);
+				} else {
+					this.decks.push(deck);
+				}
+				alert('Save ' + deck.name + '!');
 			}
 		}
 	});
