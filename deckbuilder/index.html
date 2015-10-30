@@ -12,18 +12,31 @@
   </head>
   <body>
 
-    <div id="app" class="row"> 
+    <div id="app"> 
+    	<div>
+            <a @click="changeCollection('alien')">Alien</a> 
+            <a @click="changeCollection('angel')">Angel</a> 
+            <a @click="changeCollection('beast')">Beast</a> 
+            <a @click="changeCollection('demon')">Demon</a> 
+            <a @click="changeCollection('dragon')">Dragon</a> 
+    		<a @click="changeCollection('human')">Human</a>	
+            <a @click="changeCollection('mech')">Mech</a> 
+            <a @click="changeCollection('spell')">Spell</a> 
+            <a @click="changeCollection('trap')">Trap</a> 
+    	</div>
+    	<div class="row">
     		<div class="col-md-8">
-	        <div v-for="card in cards | orderBy 'name'" style="cursor:pointer"> 
+	        <div v-for="card in currentCollection | orderBy 'name'" style="cursor:pointer"> 
 	            <Card :card="card" @click="addToDeck(card)"></Card>
 	        </div>
     		</div>
     		<div class="col-md-4">
     			<h1>Deck ({{deckTotal()}}/30)</h1>
 	        <div v-for="card in deck | orderBy 'cost'" style="cursor:pointer">
-	            <p @click="addToCollection(card)">{{card.cost}} {{card.name}} {{card.copy}}</p>
+	            <p @click="addToCollection(card)">{{card.cost}} {{card.name}} x{{card.copy}}</p>
 	        </div>
     		</div>
+    	</div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

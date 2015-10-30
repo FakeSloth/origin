@@ -1,5 +1,13 @@
 import Vue from 'vue';
+import Aliens from '../../cards/monsters/alien';
+import Angels from '../../cards/monsters/angel';
+import Beasts from '../../cards/monsters/beast';
+import Demons from '../../cards/monsters/demon';
+import Dragons from '../../cards/monsters/dragon';
+import Mechs from '../../cards/monsters/mech';
 import Humans from '../../cards/monsters/human';
+import Spells from '../../cards/spells/spells';
+import Traps from '../../cards/traps/traps';
 
 var Card = Vue.extend({ 
 	props: ['card'], 
@@ -14,11 +22,31 @@ var Card = Vue.extend({
 
 Vue.component('card', Card);
 
-let humans = Humans.map(h => {
-	h.copy = 2;
-	if (h.limited) h.copy = 1;
-	return h;
-});
+let aliens = createCards(Aliens, 'alien');
+let angels = createCards(Angels, 'angel');
+let beasts = createCards(Beasts, 'beast');
+let demons = createCards(Demons, 'demon');
+let dragons = createCards(Dragons, 'dragon');
+let mechs = createCards(Mechs, 'mech');
+let humans = createCards(Humans, 'human');
+let spells = createCards(Spells, 'spell');
+let traps = createCards(Traps, 'trap');
+
+/**
+ * Modify the created cards.
+ *
+ * @param {Array} collection
+ * @param {String} name
+ * @return {Array}
+ */
+function createCards(collection, name) {
+	return collection.map(card => {
+		card.copy = 2;
+		if (card.limited) card.copy = 1;
+		card.collection = name;
+		return card;
+	});
+}
 
 /**
  * Adds a card from src to target.
@@ -51,17 +79,32 @@ function add(src, target, card) {
 new Vue({
 	el: '#app',
 	data: {
-		cards: humans,
-		deck: []
+		collections: {
+			alien: aliens,
+			angel: angels,
+			beast: beasts,
+			demon: demons,
+			dragon: dragons,
+			human: humans,
+			mech: mechs,
+			spell: spells,
+			trap: traps
+		},
+		deck: [],
+		currentCollection: aliens,
 	},
 	methods: {
 		addToDeck(card) {
-			if (this.deck.length >= 30) return;
-			add(this.cards, this.deck, card);
+			if (this.deckTotal() >= 30) return;
+			add(this.currentCollection, this.deck, card);
 		},
 
 		addToCollection(card) {
-			add(this.deck, this.cards, card);
+			add(this.deck, this.collections[card.collection], card);
+		},
+
+		changeCollection(collection) {
+			this.currentCollection = this.collections[collection];
 		},
 
 		deckTotal() {

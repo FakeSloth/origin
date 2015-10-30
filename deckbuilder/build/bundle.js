@@ -5237,9 +5237,41 @@
 	
 	var _vue2 = _interopRequireDefault(_vue);
 	
-	var _cardsMonstersHuman = __webpack_require__(261);
+	var _cardsMonstersAlien = __webpack_require__(261);
+	
+	var _cardsMonstersAlien2 = _interopRequireDefault(_cardsMonstersAlien);
+	
+	var _cardsMonstersAngel = __webpack_require__(262);
+	
+	var _cardsMonstersAngel2 = _interopRequireDefault(_cardsMonstersAngel);
+	
+	var _cardsMonstersBeast = __webpack_require__(263);
+	
+	var _cardsMonstersBeast2 = _interopRequireDefault(_cardsMonstersBeast);
+	
+	var _cardsMonstersDemon = __webpack_require__(264);
+	
+	var _cardsMonstersDemon2 = _interopRequireDefault(_cardsMonstersDemon);
+	
+	var _cardsMonstersDragon = __webpack_require__(265);
+	
+	var _cardsMonstersDragon2 = _interopRequireDefault(_cardsMonstersDragon);
+	
+	var _cardsMonstersMech = __webpack_require__(266);
+	
+	var _cardsMonstersMech2 = _interopRequireDefault(_cardsMonstersMech);
+	
+	var _cardsMonstersHuman = __webpack_require__(267);
 	
 	var _cardsMonstersHuman2 = _interopRequireDefault(_cardsMonstersHuman);
+	
+	var _cardsSpellsSpells = __webpack_require__(268);
+	
+	var _cardsSpellsSpells2 = _interopRequireDefault(_cardsSpellsSpells);
+	
+	var _cardsTrapsTraps = __webpack_require__(269);
+	
+	var _cardsTrapsTraps2 = _interopRequireDefault(_cardsTrapsTraps);
 	
 	var Card = _vue2['default'].extend({
 		props: ['card'],
@@ -5248,11 +5280,31 @@
 	
 	_vue2['default'].component('card', Card);
 	
-	var humans = _cardsMonstersHuman2['default'].map(function (h) {
-		h.copy = 2;
-		if (h.limited) h.copy = 1;
-		return h;
-	});
+	var aliens = createCards(_cardsMonstersAlien2['default'], 'alien');
+	var angels = createCards(_cardsMonstersAngel2['default'], 'angel');
+	var beasts = createCards(_cardsMonstersBeast2['default'], 'beast');
+	var demons = createCards(_cardsMonstersDemon2['default'], 'demon');
+	var dragons = createCards(_cardsMonstersDragon2['default'], 'dragon');
+	var mechs = createCards(_cardsMonstersMech2['default'], 'mech');
+	var humans = createCards(_cardsMonstersHuman2['default'], 'human');
+	var spells = createCards(_cardsSpellsSpells2['default'], 'spell');
+	var traps = createCards(_cardsTrapsTraps2['default'], 'trap');
+	
+	/**
+	 * Modify the created cards.
+	 *
+	 * @param {Array} collection
+	 * @param {String} name
+	 * @return {Array}
+	 */
+	function createCards(collection, name) {
+		return collection.map(function (card) {
+			card.copy = 2;
+			if (card.limited) card.copy = 1;
+			card.collection = name;
+			return card;
+		});
+	}
 	
 	/**
 	 * Adds a card from src to target.
@@ -5285,17 +5337,32 @@
 	new _vue2['default']({
 		el: '#app',
 		data: {
-			cards: humans,
-			deck: []
+			collections: {
+				alien: aliens,
+				angel: angels,
+				beast: beasts,
+				demon: demons,
+				dragon: dragons,
+				human: humans,
+				mech: mechs,
+				spell: spells,
+				trap: traps
+			},
+			deck: [],
+			currentCollection: aliens
 		},
 		methods: {
 			addToDeck: function addToDeck(card) {
-				if (this.deck.length >= 30) return;
-				add(this.cards, this.deck, card);
+				if (this.deckTotal() >= 30) return;
+				add(this.currentCollection, this.deck, card);
 			},
 	
 			addToCollection: function addToCollection(card) {
-				add(this.deck, this.cards, card);
+				add(this.deck, this.collections[card.collection], card);
+			},
+	
+			changeCollection: function changeCollection(collection) {
+				this.currentCollection = this.collections[collection];
 			},
 	
 			deckTotal: function deckTotal() {
@@ -15645,6 +15712,386 @@
 	    value: true
 	});
 	exports["default"] = [{
+	    "name": "Alien Soldier",
+	    "cost": 2,
+	    "attack": 4,
+	    "life": 3,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Alien Spacecraft",
+	    "cost": 11,
+	    "attack": 10,
+	    "life": 17,
+	    "effect": "Once per turn, select one of your opponent's monsters, that monster cannot attack this turn.",
+	    "limited": false
+	}, {
+	    "name": "darkpoo",
+	    "cost": 100,
+	    "attack": 100,
+	    "life": 20,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Gulpin",
+	    "cost": 0,
+	    "attack": 0,
+	    "life": 2,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "jd",
+	    "cost": 50,
+	    "attack": 1,
+	    "life": 20,
+	    "effect": "Your opponent cannot activate card effects or play spell cards, and loses 1% energy per turn.",
+	    "limited": false
+	}, {
+	    "name": "Nineage",
+	    "cost": 500,
+	    "attack": 49,
+	    "life": 49,
+	    "effect": "Costs 100% less for each card in your hand.",
+	    "limited": false
+	}, {
+	    "name": "Sundar",
+	    "cost": 20,
+	    "attack": 0,
+	    "life": 25,
+	    "effect": "Once per turn,a monster randomly gains 5%/5% until end of turn",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 262 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Angelitican",
+	    "cost": 4,
+	    "attack": 1,
+	    "life": 2,
+	    "effect": "When an angels dies, take 20% health and summon a random fusion angel monster.",
+	    "limited": false
+	}, {
+	    "name": "Angel Archer",
+	    "cost": 3,
+	    "attack": 6,
+	    "life": 3,
+	    "effect": "This monster can attack opponent directly at the cost of 2 energy",
+	    "limited": false
+	}, {
+	    "name": "Angelic Dragon",
+	    "cost": 20,
+	    "attack": 18,
+	    "life": 18,
+	    "effect": "TWhen you summon an angel, gain +2%/2%.",
+	    "limited": false
+	}, {
+	    "name": "Angel Healer",
+	    "cost": 10,
+	    "attack": 0,
+	    "life": 18,
+	    "effect": "Gain 5% life per turn while this card is on the field",
+	    "limited": false
+	}, {
+	    "name": "Angel of Death",
+	    "cost": 35,
+	    "attack": 40,
+	    "life": 28,
+	    "effect": "Once per turn, destroy a monster on your opponent's side of the field and increase your life by half the monster’s remaining life.",
+	    "limited": true
+	}, {
+	    "name": "Angel Warrior",
+	    "cost": 2,
+	    "attack": 6,
+	    "life": 2,
+	    "effect": "Gain 1% life when this card is summoned",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Falcon Baron",
+	    "cost": 20,
+	    "attack": 15,
+	    "life": 15,
+	    "effect": "Once per turn, you can sacrifice one falcon on your side and destroy a target monster.",
+	    "limited": false
+	}, {
+	    "name": "Falcon General",
+	    "cost": 25,
+	    "attack": 20,
+	    "life": 20,
+	    "effect": "All Falcons gain 5%/5%",
+	    "limited": false
+	}, {
+	    "name": "Falcon Medic",
+	    "cost": 20,
+	    "attack": 8,
+	    "life": 8,
+	    "effect": "Costs 4% Less to play for every Falcon on the field. Once per turn. heal a monster to full or gain 5% life.",
+	    "limited": false
+	}, {
+	    "name": "Gryph Rider",
+	    "cost": 5,
+	    "attack": 4,
+	    "life": 9,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Middle Class Falcon",
+	    "cost": 10,
+	    "attack": 10,
+	    "life": 10,
+	    "effect": "When Targeted: If there are any Peasant Falcons in play, target them instead of this card.",
+	    "limited": false
+	}, {
+	    "name": "Peasant Falcon",
+	    "cost": 5,
+	    "attack": 6,
+	    "life": 6,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Political Correct Lion",
+	    "cost": 20,
+	    "attack": 25,
+	    "life": 15,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Serious Bear",
+	    "cost": 10,
+	    "attack": 10,
+	    "life": 8,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Top Hat Falcon",
+	    "cost": 5,
+	    "attack": 5,
+	    "life": 5,
+	    "effect": "If an Upper Class Falcon is put into play, gain 10%/10%",
+	    "limited": false
+	}, {
+	    "name": "Upper Class Falcon",
+	    "cost": 15,
+	    "attack": 13,
+	    "life": 13,
+	    "effect": "Gain 2%/2% for every Falcon in play",
+	    "limited": false
+	}, {
+	    "name": "Weak Inferiority",
+	    "cost": 5,
+	    "attack": 4,
+	    "life": 4,
+	    "effect": "",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 264 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Dark Statue",
+	    "cost": 1,
+	    "attack": 17,
+	    "life": 10,
+	    "effect": "When played, take 10% damage.",
+	    "limited": false
+	}, {
+	    "name": "Dead Horserider",
+	    "cost": 2,
+	    "attack": 4,
+	    "life": 4,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Nightmare Unicorn",
+	    "cost": 7,
+	    "attack": 7,
+	    "life": 7,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Void Fiend",
+	    "cost": 1,
+	    "attack": 5,
+	    "life": 2,
+	    "effect": "This card’s attack increases by 1% for each Void Fiend on your side of the field",
+	    "limited": false
+	}, {
+	    "name": "Void Master Knight",
+	    "cost": 15,
+	    "attack": 15,
+	    "life": 18,
+	    "effect": "Once per turn, you can summon one Void monster from your hand with no energy cost.",
+	    "limited": false
+	}, {
+	    "name": "Void Naten",
+	    "cost": 45,
+	    "attack": 25,
+	    "life": 50,
+	    "effect": "While this card is on your side of the field, Your opponent cannot damage other Void monsters.",
+	    "limited": true
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 265 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Armored Fiend Dragon",
+	    "cost": 15,
+	    "attack": 12,
+	    "life": 30,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Explosive Deeming Dragon",
+	    "cost": 30,
+	    "attack": 35,
+	    "life": 35,
+	    "effect": "Summon 2 Explosive Tiny Dragons.",
+	    "limited": true
+	}, {
+	    "name": "Explosive Golden Mega Flaming Dragon",
+	    "cost": 45,
+	    "attack": 45,
+	    "life": 45,
+	    "effect": "When played, destroy all monsters on the field.",
+	    "limited": true
+	}, {
+	    "name": "Explosive Tiny Dragon",
+	    "cost": 5,
+	    "attack": 4,
+	    "life": 6,
+	    "effect": "When this card is destroyed, do 1%-10% damage to an enemy monster.",
+	    "limited": false
+	}, {
+	    "name": "Feirzamader",
+	    "cost": 25,
+	    "attack": 35,
+	    "life": 10,
+	    "effect": "When summon, can attack instantly.",
+	    "limited": false
+	}, {
+	    "name": "Salazar Dragon",
+	    "cost": 18,
+	    "attack": 0,
+	    "life": 0,
+	    "effect": "Gain +5%/+5% for every monster that was sent to the graveyard.",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Gryph Mech",
+	    "cost": 3,
+	    "attack": 6,
+	    "life": 6,
+	    "effect": "Your opponent cannot attack directly while this card is on your side of the field.",
+	    "limited": false
+	}, {
+	    "name": "Gryph Tank",
+	    "cost": 10,
+	    "attack": 8,
+	    "life": 10,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Robo Monkey",
+	    "cost": 4,
+	    "attack": 4,
+	    "life": 4,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Robo Police Officier",
+	    "cost": 80,
+	    "attack": 60,
+	    "life": 70,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Terra Spacecraft",
+	    "cost": 5,
+	    "attack": 8,
+	    "life": 15,
+	    "effect": "While this card is on your side of the field, your opponent cannot attack directly",
+	    "limited": false
+	}, {
+	    "name": "Terra Walker",
+	    "cost": 8,
+	    "attack": 11,
+	    "life": 13,
+	    "effect": "",
+	    "limited": false
+	}, {
+	    "name": "Telsa Coil",
+	    "cost": 20,
+	    "attack": 0,
+	    "life": 45,
+	    "effect": "While this card is on the field, gain 10% additional energy per turn.",
+	    "limited": false
+	}, {
+	    "name": "Telsa Generator",
+	    "cost": 6,
+	    "attack": 0,
+	    "life": 20,
+	    "effect": "While this card is on the field, gain 3% additional energy per turn.",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 267 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
 	    "name": "Allegiant Gryph",
 	    "cost": 40,
 	    "attack": 75,
@@ -15748,6 +16195,220 @@
 	    "attack": 8,
 	    "life": 8,
 	    "effect": "",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Angelic Horn",
+	    "cost": 10,
+	    "effect": "Summon one Angel monster from your deck with 10% or less cost to your side of the field.",
+	    "limited": false
+	}, {
+	    "name": "Airlock",
+	    "cost": 10,
+	    "effect": "Clear the landscape.",
+	    "limited": false
+	}, {
+	    "name": "Blizzard",
+	    "cost": 8,
+	    "effect": "Freeze your opponent's monster for a turn.",
+	    "limited": false
+	}, {
+	    "name": "Bolster Spirits",
+	    "cost": 10,
+	    "effect": "Name a type of monster. They gain 3% for every other monster on their side of the field sharing their type",
+	    "limited": false
+	}, {
+	    "name": "Call of Nature",
+	    "cost": 20,
+	    "effect": "Change the landscape to give Beasts 5%/5%",
+	    "limited": false
+	}, {
+	    "name": "Cloud City",
+	    "cost": 15,
+	    "effect": "Landscape Effect: While this field is up, once per turn, pay 5% energy to add an Angel card from your graveyard to your hand",
+	    "limited": false
+	}, {
+	    "name": "Chidori",
+	    "cost": 12,
+	    "effect": "Deal 10%.",
+	    "limited": false
+	}, {
+	    "name": "Defog",
+	    "cost": 10,
+	    "effect": "Remove entry hazards from the field. (spikes)",
+	    "limited": false
+	}, {
+	    "name": "Defense Breaker",
+	    "cost": 20,
+	    "effect": "Destroy all defense monsters on the field.",
+	    "limited": false
+	}, {
+	    "name": "Drawer",
+	    "cost": 25,
+	    "effect": "Draw 2 cards.",
+	    "limited": false
+	}, {
+	    "name": "Energy Cell",
+	    "cost": 3,
+	    "effect": "Increase your energy by 8%",
+	    "limited": false
+	}, {
+	    "name": "Falcon's Call",
+	    "cost": 8,
+	    "effect": "Give a target Falcon 5%/5%",
+	    "limited": false
+	}, {
+	    "name": "Gryph Phalanx",
+	    "cost": 20,
+	    "effect": "Landscape effect: While you have more than 1 gryph monster on your side of the field. Your opponent cannot attack you directly.",
+	    "limited": false
+	}, {
+	    "name": "Heater",
+	    "cost": 5,
+	    "effect": "Burn a opponent’s monster cutting their attack in half.",
+	    "limited": false
+	}, {
+	    "name": "Lock",
+	    "cost": 10,
+	    "effect": "Change target monster to defense and subdue its ability. (Continuous)",
+	    "limited": false
+	}, {
+	    "name": "Instant Cup Noodles",
+	    "cost": 11,
+	    "effect": "Heal 15% life.",
+	    "limited": false
+	}, {
+	    "name": "Quantum Dwarf",
+	    "cost": 20,
+	    "effect": "Destroy all monsters on the field.",
+	    "limited": false
+	}, {
+	    "name": "Run Wild",
+	    "cost": 15,
+	    "effect": "Give all beasts 8%/3% until end of turn.",
+	    "limited": false
+	}, {
+	    "name": "Salutations",
+	    "cost": 13,
+	    "effect": "This card can only be played when Warlic or warlic is on your side of the field. Verbally greet your Opponent",
+	    "limited": true
+	}, {
+	    "name": "Spikes",
+	    "cost": 10,
+	    "effect": "When your opponents plays a monster, it loses 1% health.",
+	    "limited": false
+	}, {
+	    "name": "Super Growth",
+	    "cost": 15,
+	    "effect": "Gain an extra 4% energy each turn.",
+	    "limited": false
+	}, {
+	    "name": "Stampede",
+	    "cost": 20,
+	    "effect": "A target Beast can attack twice this turn.",
+	    "limited": false
+	}, {
+	    "name": "Terraform",
+	    "cost": 20,
+	    "effect": "Change the landscape to give Dragon/Human/Mech +4%/4%.",
+	    "limited": false
+	}, {
+	    "name": "Time Lord",
+	    "cost": 30,
+	    "effect": "Your opponent's monster, lose 5%/5% each turn since it was played.",
+	    "limited": false
+	}, {
+	    "name": "Thunder Wave",
+	    "cost": 10,
+	    "effect": "Paralyze a monster, making it able to act once every other turn.",
+	    "limited": false
+	}, {
+	    "name": "The Void",
+	    "cost": 15,
+	    "effect": "Landscape Effect: While this landscape  is active Void monsters can be summoned for half their energy cost but are destroyed when this field is changed",
+	    "limited": false
+	}, {
+	    "name": "Toxic",
+	    "cost": 10,
+	    "effect": "Paralyze a monster, making it able to act once every other turn.",
+	    "limited": false
+	}, {
+	    "name": "Warp Fusion",
+	    "cost": 30,
+	    "effect": "If one monster necessary for a fusion is on your side of the field, search your deck for its fusion partner, add it to the field, and fuse the monsters.",
+	    "limited": false
+	}, {
+	    "name": "Whereabouts",
+	    "cost": 13,
+	    "effect": "Add a random card that starts with a ‘w’ case insensitive to your hand.",
+	    "limited": false
+	}];
+	module.exports = exports["default"];
+
+/***/ },
+/* 269 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = [{
+	    "name": "Banhammer",
+	    "cost": 20,
+	    "effect": "Destroy a random card on your opponent’s side of the field.",
+	    "limited": false
+	}, {
+	    "name": "Breath of God",
+	    "cost": 15,
+	    "effect": "When a monster on your side of the field would be destroyed, destroy this card in its place.",
+	    "limited": false
+	}, {
+	    "name": "Copycat",
+	    "cost": 13,
+	    "effect": "When a monster on your side of the field is destroyed, get 2 copies of it in your hand.",
+	    "limited": false
+	}, {
+	    "name": "Energy Shield",
+	    "cost": 5,
+	    "effect": "Block one attack from an opponent’s monster.",
+	    "limited": false
+	}, {
+	    "name": "Fender and Phil’s Shield of Glory",
+	    "cost": 43,
+	    "effect": "When you are about to take lethal damage, block it and gain immunity for 2 turns.",
+	    "limited": true
+	}, {
+	    "name": "Disarm",
+	    "cost": 8,
+	    "effect": "Negate the effect on an opponent’s spell or trap card.",
+	    "limited": false
+	}, {
+	    "name": "Holy Banana Peel",
+	    "cost": 50,
+	    "effect": "When your opponent plays a card, summon revive a ghost monster from your grave.",
+	    "limited": true
+	}, {
+	    "name": "Pitfall",
+	    "cost": 10,
+	    "effect": "Destroy target attacking monster.",
+	    "limited": false
+	}, {
+	    "name": "Tesla Release",
+	    "cost": 12,
+	    "effect": "When a Tesla monster on your side of the field is destroyed, deal 10% damage to your opponent.",
 	    "limited": false
 	}];
 	module.exports = exports["default"];
