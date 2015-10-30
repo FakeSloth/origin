@@ -14,8 +14,10 @@ var Card = Vue.extend({
 	template: ` 
 		<div> 
 			<h1>{{card.name}} x{{card.copy}}</h1> 
-			Cost: {{card.cost}} Life: {{card.life}} Attack: {{card.attack}} 
-			Effect: {{card.effect}} 
+			Cost: {{card.cost}}
+			{{typeof card.life === 'number' ? 'Life: ' + card.life : ''}}
+			{{typeof card.attack === 'number' ? 'Attack: ' + card.attack : ''}} 
+			Effect: {{card.effect ? card.effect : 'None'}} 
 		</div> 
 	` 
 });

@@ -5275,7 +5275,7 @@
 	
 	var Card = _vue2['default'].extend({
 		props: ['card'],
-		template: ' \n\t\t<div> \n\t\t\t<h1>{{card.name}} x{{card.copy}}</h1> \n\t\t\tCost: {{card.cost}} Life: {{card.life}} Attack: {{card.attack}} \n\t\t\tEffect: {{card.effect}} \n\t\t</div> \n\t'
+		template: ' \n\t\t<div> \n\t\t\t<h1>{{card.name}} x{{card.copy}}</h1> \n\t\t\tCost: {{card.cost}}\n\t\t\t{{typeof card.life === \'number\' ? \'Life: \' + card.life : \'\'}}\n\t\t\t{{typeof card.attack === \'number\' ? \'Attack: \' + card.attack : \'\'}} \n\t\t\tEffect: {{card.effect ? card.effect : \'None\'}} \n\t\t</div> \n\t'
 	});
 	
 	_vue2['default'].component('card', Card);
