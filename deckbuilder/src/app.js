@@ -132,14 +132,6 @@ new Vue({
 			this.deckName = deck.name;
 			this.index = index;
 			this.loaded = true;
-			for (let col in this.collections) {
-				this.collections[col].forEach((_, i) => {
-					this.collections[col][i].copy = copyCache[index].collections[col][i];
-				});	
-			}
-			this.currentDeck.forEach((card, i) => {
-				this.currentDeck[i].copy = copyCache[index].cards[i];
-			});
 		},
 
 		saveDeck() {
@@ -148,26 +140,14 @@ new Vue({
 			}
 			let deck = {
 				name: this.deckName || 'Untitled Deck',
-				cards: this.currentDeck,
-				collections: this.collections
+				cards: JSON.parse(JSON.stringify(this.currentDeck)),
+				collections: JSON.parse(JSON.stringify(this.collections))
 			};
 			if (this.loaded) {
 				this.decks.$set(this.index, deck);
 			} else {
 				this.decks.push(deck);
 			}
-			const index = this.decks.length - 1;
-			copyCache[index] = {collections: {}, cards: {}};
-			for (let col in this.collections) {
-				copyCache[index].collections[col] = {};
-				this.collections[col].forEach((card, i) => {
-					copyCache[index].collections[col][i] = card.copy;
-				});	
-			}
-			this.currentDeck.forEach((card, i) => {
-				copyCache[index].cards[i] = card.copy;
-			});
-			console.log(copyCache);
 			alert('Save ' + deck.name + '!');
 		}
 	}
