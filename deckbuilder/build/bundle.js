@@ -5383,6 +5383,8 @@
 			},
 	
 			loadDeck: function loadDeck(index) {
+				var _this = this;
+	
 				var deck = this.decks[index];
 				this.collections = deck.collections;
 				this.currentCollection = this.collections.alien;
@@ -5390,22 +5392,54 @@
 				this.deckName = deck.name;
 				this.index = index;
 				this.loaded = true;
+	
+				var _loop = function (col) {
+					_this.collections[col].forEach(function (_, i) {
+						_this.collections[col][i].copy = copyCache[index].collections[col][i];
+					});
+				};
+	
+				for (var col in this.collections) {
+					_loop(col);
+				}
+				this.currentDeck.forEach(function (card, i) {
+					_this.currentDeck[i].copy = copyCache[index].cards[i];
+				});
 			},
 	
 			saveDeck: function saveDeck() {
+				var _this2 = this;
+	
 				if (this.deckTotal() < 30) {
 					return alert('Deck is not full!');
 				}
 				var deck = {
 					name: this.deckName || 'Untitled Deck',
-					cards: JSON.parse(JSON.stringify(this.currentDeck)),
-					collections: JSON.parse(JSON.stringify(this.collections))
+					cards: this.currentDeck,
+					collections: this.collections
 				};
 				if (this.loaded) {
 					this.decks.$set(this.index, deck);
 				} else {
 					this.decks.push(deck);
 				}
+				var index = this.decks.length - 1;
+				copyCache[index] = { collections: {}, cards: {} };
+	
+				var _loop2 = function (col) {
+					copyCache[index].collections[col] = {};
+					_this2.collections[col].forEach(function (card, i) {
+						copyCache[index].collections[col][i] = card.copy;
+					});
+				};
+	
+				for (var col in this.collections) {
+					_loop2(col);
+				}
+				this.currentDeck.forEach(function (card, i) {
+					copyCache[index].cards[i] = card.copy;
+				});
+				console.log(copyCache);
 				alert('Save ' + deck.name + '!');
 			}
 		}
