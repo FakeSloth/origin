@@ -20,7 +20,7 @@ export default [
         "cost": 20,
         "attack": 18,
         "life": 18,
-        "effect": "TWhen you summon an angel, gain +2%/2%.",
+        "effect": "When you summon an angel, gain +2%/2%.",
         "limited": false
     },
     {
