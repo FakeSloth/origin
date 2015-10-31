@@ -9,6 +9,8 @@ import Humans from '../../cards/monsters/human';
 import Spells from '../../cards/spells/spells';
 import Traps from '../../cards/traps/traps';
 
+Vue.config.debug = true;
+
 var Card = Vue.extend({ 
 	props: ['card'], 
 	template: ` 
@@ -24,18 +26,17 @@ var Card = Vue.extend({
 
 Vue.component('card', Card);
 
-let Collections = {
-	alien: createCards(Aliens, 'alien'),
-	angel: createCards(Angels, 'angel'),
-	beast: createCards(Beasts, 'beast'),
-	demon: createCards(Demons, 'demon'),
-	dragon: createCards(Dragons, 'dragon'),
-	mech: createCards(Mechs, 'mech'),
-	human: createCards(Humans, 'human'),
-	spell: createCards(Spells, 'spell'),
-	trap: createCards(Traps, 'trap')
+function Collections() {
+	this.alien = createCards(Aliens, 'alien');
+	this.angel = createCards(Angels, 'angel');
+	this.beast = createCards(Beasts, 'beast');
+	this.demon = createCards(Demons, 'demon');
+	this.dragon = createCards(Dragons, 'dragon');
+	this.mech = createCards(Mechs, 'mech');
+	this.human = createCards(Humans, 'human');
+	this.spell = createCards(Spells, 'spell');
+	this.trap = createCards(Traps, 'trap');
 };
-
 
 /**
  * Modify the created cards.
@@ -81,6 +82,8 @@ function add(src, target, card) {
 	target.push(card);
 }
 
+let copyCache = {};
+
 new Vue({
 	el: '#app',
 	data: {
@@ -107,12 +110,13 @@ new Vue({
 		},
 
 		createNewDeck() {
-			let collections = Object.create(Collections);
-			this.collections = collections;
+			if (this.decks.length) console.log(JSON.stringify(this.decks[0].collections.alien))
+			this.collections = new Collections();
 			this.currentCollection = this.collections.alien;
 			this.currentDeck = [];
 			this.deckName = '';
 			this.loaded = false;
+			if (this.decks.length) console.log(JSON.stringify(this.decks[0].collections.alien))
 		},
 
 		deckTotal() {
@@ -127,23 +131,42 @@ new Vue({
 			this.deckName = deck.name;
 			this.index = index;
 			this.loaded = true;
+			for (let col in this.collections) {
+				this.collections[col].forEach((_, i) => {
+					this.collections[col][i].copy = copyCache[index].collections[col][i];
+				});	
+			}
+			this.currentDeck.forEach((card, i) => {
+				this.currentDeck[i].copy = copyCache[index].cards[i];
+			});
 		},
 
 		saveDeck() {
 			if (this.deckTotal() < 30) {
 				return alert('Deck is not full!');
 			}
-			let collections = this.collections;
 			let deck = {
 				name: this.deckName || 'Untitled Deck',
 				cards: this.currentDeck,
-				collections: collections
+				collections: this.collections
 			};
 			if (this.loaded) {
 				this.decks.$set(this.index, deck);
 			} else {
 				this.decks.push(deck);
 			}
+			const index = this.decks.length - 1;
+			copyCache[index] = {collections: {}, cards: {}};
+			for (let col in this.collections) {
+				copyCache[index].collections[col] = {};
+				this.collections[col].forEach((card, i) => {
+					copyCache[index].collections[col][i] = card.copy;
+				});	
+			}
+			this.currentDeck.forEach((card, i) => {
+				copyCache[index].cards[i] = card.copy;
+			});
+			console.log(copyCache);
 			alert('Save ' + deck.name + '!');
 		}
 	}

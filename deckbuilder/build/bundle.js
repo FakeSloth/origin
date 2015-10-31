@@ -5273,6 +5273,8 @@
 	
 	var _cardsTrapsTraps2 = _interopRequireDefault(_cardsTrapsTraps);
 	
+	_vue2['default'].config.debug = true;
+	
 	var Card = _vue2['default'].extend({
 		props: ['card'],
 		template: ' \n\t\t<div> \n\t\t\t<h1>{{card.name}} x{{card.copy}}</h1> \n\t\t\tCost: {{card.cost}}\n\t\t\t{{typeof card.life === \'number\' ? \'Life: \' + card.life : \'\'}}\n\t\t\t{{typeof card.attack === \'number\' ? \'Attack: \' + card.attack : \'\'}} \n\t\t\tEffect: {{card.effect ? card.effect : \'None\'}} \n\t\t</div> \n\t'
@@ -5280,16 +5282,16 @@
 	
 	_vue2['default'].component('card', Card);
 	
-	var Collections = {
-		alien: createCards(_cardsMonstersAlien2['default'], 'alien'),
-		angel: createCards(_cardsMonstersAngel2['default'], 'angel'),
-		beast: createCards(_cardsMonstersBeast2['default'], 'beast'),
-		demon: createCards(_cardsMonstersDemon2['default'], 'demon'),
-		dragon: createCards(_cardsMonstersDragon2['default'], 'dragon'),
-		mech: createCards(_cardsMonstersMech2['default'], 'mech'),
-		human: createCards(_cardsMonstersHuman2['default'], 'human'),
-		spell: createCards(_cardsSpellsSpells2['default'], 'spell'),
-		trap: createCards(_cardsTrapsTraps2['default'], 'trap')
+	function Collections() {
+		this.alien = createCards(_cardsMonstersAlien2['default'], 'alien');
+		this.angel = createCards(_cardsMonstersAngel2['default'], 'angel');
+		this.beast = createCards(_cardsMonstersBeast2['default'], 'beast');
+		this.demon = createCards(_cardsMonstersDemon2['default'], 'demon');
+		this.dragon = createCards(_cardsMonstersDragon2['default'], 'dragon');
+		this.mech = createCards(_cardsMonstersMech2['default'], 'mech');
+		this.human = createCards(_cardsMonstersHuman2['default'], 'human');
+		this.spell = createCards(_cardsSpellsSpells2['default'], 'spell');
+		this.trap = createCards(_cardsTrapsTraps2['default'], 'trap');
 	};
 	
 	/**
@@ -5336,6 +5338,8 @@
 		target.push(card);
 	}
 	
+	var copyCache = {};
+	
 	new _vue2['default']({
 		el: '#app',
 		data: {
@@ -5362,25 +5366,13 @@
 			},
 	
 			createNewDeck: function createNewDeck() {
-				if (this.decks.length) {
-	
-					console.log(JSON.stringify(this.decks[0].collections.alien));
-					var collections = Object.create(Collections);
-					console.log(JSON.stringify(this.decks[0].collections.alien));
-					this.collections = collections;
-					this.currentCollection = this.collections.alien;
-					this.currentDeck = [];
-					this.deckName = '';
-					this.loaded = false;
-				} else {
-	
-					var collections = Object.create(Collections);
-					this.collections = collections;
-					this.currentCollection = this.collections.alien;
-					this.currentDeck = [];
-					this.deckName = '';
-					this.loaded = false;
-				}
+				if (this.decks.length) console.log(JSON.stringify(this.decks[0].collections.alien));
+				this.collections = new Collections();
+				this.currentCollection = this.collections.alien;
+				this.currentDeck = [];
+				this.deckName = '';
+				this.loaded = false;
+				if (this.decks.length) console.log(JSON.stringify(this.decks[0].collections.alien));
 			},
 	
 			deckTotal: function deckTotal() {
@@ -5390,6 +5382,8 @@
 			},
 	
 			loadDeck: function loadDeck(index) {
+				var _this = this;
+	
 				var deck = this.decks[index];
 				this.collections = deck.collections;
 				this.currentCollection = this.collections.alien;
@@ -5397,23 +5391,54 @@
 				this.deckName = deck.name;
 				this.index = index;
 				this.loaded = true;
+	
+				var _loop = function (col) {
+					_this.collections[col].forEach(function (_, i) {
+						_this.collections[col][i].copy = copyCache[index].collections[col][i];
+					});
+				};
+	
+				for (var col in this.collections) {
+					_loop(col);
+				}
+				this.currentDeck.forEach(function (card, i) {
+					_this.currentDeck[i].copy = copyCache[index].cards[i];
+				});
 			},
 	
 			saveDeck: function saveDeck() {
+				var _this2 = this;
+	
 				if (this.deckTotal() < 30) {
 					return alert('Deck is not full!');
 				}
-				var collections = this.collections;
 				var deck = {
 					name: this.deckName || 'Untitled Deck',
 					cards: this.currentDeck,
-					collections: collections
+					collections: this.collections
 				};
 				if (this.loaded) {
 					this.decks.$set(this.index, deck);
 				} else {
 					this.decks.push(deck);
 				}
+				var index = this.decks.length - 1;
+				copyCache[index] = { collections: {}, cards: {} };
+	
+				var _loop2 = function (col) {
+					copyCache[index].collections[col] = {};
+					_this2.collections[col].forEach(function (card, i) {
+						copyCache[index].collections[col][i] = card.copy;
+					});
+				};
+	
+				for (var col in this.collections) {
+					_loop2(col);
+				}
+				this.currentDeck.forEach(function (card, i) {
+					copyCache[index].cards[i] = card.copy;
+				});
+				console.log(copyCache);
 				alert('Save ' + deck.name + '!');
 			}
 		}
