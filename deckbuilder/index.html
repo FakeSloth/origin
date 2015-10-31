@@ -34,9 +34,10 @@
             <a @click="changeCollection('spell')">Spell</a> 
             <a @click="changeCollection('trap')">Trap</a> 
     	</div>
+        <input type="text" v-model="search">
     	<div class="row">
     		<div class="col-md-8">
-	        <div v-for="card in currentCollection | orderBy 'name'" style="cursor:pointer"> 
+	        <div v-for="card in currentCollection | orderBy 'name' | filterBy search in 'name'" style="cursor:pointer"> 
 	            <Card :card="card" @click="addToDeck(card)"></Card>
 	        </div>
     		</div>

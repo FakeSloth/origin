@@ -93,7 +93,8 @@ new Vue({
 		currentCollection: [],
 		deckName: '',
 		loaded: false,
-		index: 0
+		index: 0,
+		search: ''
 	},
 	methods: {
 		addToDeck(card) {
